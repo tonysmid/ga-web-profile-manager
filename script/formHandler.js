@@ -4,6 +4,7 @@ let imageUploaded = false;
 let profiles;
 const GRAPHAWARE_WEBSITE_PROFILES = 'https://graphaware.com/company/';
 const GITHUB_REPO_BASE = 'https://api.github.com/repos/aldrinm/graphaware.github.io';
+const GITHUB_AUTH_TOKEN = '<your-token-here>'
 
 function prepareContactHtml(formData, imgName) {
     return `<div class="contact">`
