@@ -6,21 +6,21 @@ const GRAPHAWARE_WEBSITE_PROFILES = 'https://graphaware.com/company/';
 const GITHUB_REPO_BASE = 'https://api.github.com/repos/aldrinm/graphaware.github.io';
 
 function prepareContactHtml(formData, imgName) {
-    return `<div className="contact">`
-        + `<div className="card">`
-            + `<figure className="front">`
+    return `<div class="contact">`
+        + `<div class="card">`
+            + `<figure class="front">`
                 + `<img src="../images/team/zz-noPicture.jpg" alt="${formData.name}"/>`
                 + `<h3>${formData.name}</h3>`
-                + `<p className="smaller">${formData.position}<br>`
+                + `<p class="smaller">${formData.position}<br>`
                     + `<a href="mailto:${formData.email}">${formData.email}</a><br>`
-                  + `  <a className="twitter_bird" href="https://twitter.com/graph_aware">${formData.twitter}</a><br>`
+                  + `  <a class="twitter_bird" href="https://twitter.com/graph_aware">${formData.twitter}</a><br>`
               + `  </p>`
-              + `  <a href="javascript:void(0)" className="button smaller text showmore">Read more</a>`
+              + `  <a href="javascript:void(0)" class="button smaller text showmore">Read more</a>`
           + `  </figure>`
-           + ` <figure className="back">`
+           + ` <figure class="back">`
                + ` <h3>About ${formData.name.trim().split(' ')[0]}</h3>`
                 +`<p>${formData.bio}</p>`
-              + `  <a href="javascript:void(0)" className="close-card">Close</a>`
+              + `  <a href="javascript:void(0)" class="close-card">Close</a>`
            + ` </figure>`
        + ` </div>`
    + ` </div>`;
@@ -174,7 +174,7 @@ function init() {
     monitorPlace();
 }
 
-function commitNewContent(newContent, sha) {
+async function commitNewContent(newContent, sha, picData, imgName) {
     /* this didn't work
     let formData = new FormData();
     formData.append('message', 'New person added');
@@ -191,7 +191,9 @@ function commitNewContent(newContent, sha) {
         },
         body: '{"message":"New person added","content":"'+btoa(newContent)+'", "branch":"master", "sha":"'+sha+'"}'
     }).then(function (response) {
-        console.log(response.json());
+        //console.log(response.json());
+        commitNewFile(picData, imgName);
+        return response.json();
     }).finally(() => {
         document.getElementById('loader').classList.add('hidden');
         document.getElementById('done').classList.remove('hidden');
@@ -206,7 +208,7 @@ function getAllIndexes(arr, val) {
     return indexes;
 }
 
-function uploadToGithub(contactHtml, place, picData, imgName) {
+async function uploadToGithub(contactHtml, place, picData, imgName) {
 
     fetch(GITHUB_REPO_BASE + '/contents/company/index.html', {
         method: 'GET',
@@ -229,8 +231,8 @@ function uploadToGithub(contactHtml, place, picData, imgName) {
         let newContent = decodedContents.substring(0, indexToUse) + anchorPoint + '\n\n<!-- Contact card -->\n\n' + contactHtml + '\n\n<!-- End Contact Card -->\n\n' + decodedContents.substring(indexToUse + anchorPoint.length);
 
         //now commit it on main
-        //commitNewFile(picData, imgName);
-        commitNewContent(newContent, sha);
+        commitNewContent(newContent, sha, picData, imgName);
+
 
     }).catch(function (err) {
         // There was an error
@@ -241,7 +243,7 @@ function uploadToGithub(contactHtml, place, picData, imgName) {
 
 }
 
-function commitNewFile(picData, imgName) {
+async function commitNewFile(picData, imgName) {
     fetch(GITHUB_REPO_BASE + '/contents/images/team/'+imgName, {
         method: 'PUT',
         headers: {
@@ -249,7 +251,8 @@ function commitNewFile(picData, imgName) {
         },
         body: '{"message":"New image added","content":"'+ picData.substr(picData.indexOf(',') + 1) +'", "branch":"master"}'
     }).then(function (response) {
-        console.log(response.json());
+        //console.log(response.json());
+        return response.json()
     });
 
 }
