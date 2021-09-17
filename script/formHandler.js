@@ -4,13 +4,12 @@ let imageUploaded = false;
 let profiles;
 const GRAPHAWARE_WEBSITE_PROFILES = 'https://graphaware.com/company/';
 const GITHUB_REPO_BASE = 'https://api.github.com/repos/aldrinm/graphaware.github.io';
-const GITHUB_AUTH_TOKEN = '';
 
 function prepareContactHtml(formData, imgName) {
     return `<div className="contact">`
         + `<div className="card">`
             + `<figure className="front">`
-                + `<img src="../images/team/${imgName}" alt="${formData.name}"/>`
+                + `<img src="../images/team/zz-noPicture.jpg" alt="${formData.name}"/>`
                 + `<h3>${formData.name}</h3>`
                 + `<p className="smaller">${formData.position}<br>`
                     + `<a href="mailto:${formData.email}">${formData.email}</a><br>`
@@ -29,6 +28,8 @@ function prepareContactHtml(formData, imgName) {
 
 async function submitForm() {
 
+    document.getElementById('loader').classList.remove('hidden');
+
     const formData = {
         name: document.getElementById('fname').value,
         position: document.getElementById('fposition').value,
@@ -46,6 +47,7 @@ async function submitForm() {
 
     if(document.getElementById('issues').innerText.length){
         console.log('errors in form.');
+        document.getElementById('loader').classList.add('hidden');
         return;
     }
 
@@ -190,7 +192,10 @@ function commitNewContent(newContent, sha) {
         body: '{"message":"New person added","content":"'+btoa(newContent)+'", "branch":"master", "sha":"'+sha+'"}'
     }).then(function (response) {
         console.log(response.json());
-    });
+    }).finally(() => {
+        document.getElementById('loader').classList.add('hidden');
+        document.getElementById('done').classList.remove('hidden');
+    })
 }
 
 function getAllIndexes(arr, val) {
@@ -230,6 +235,7 @@ function uploadToGithub(contactHtml, place, picData, imgName) {
     }).catch(function (err) {
         // There was an error
         console.warn('Something went wrong.', err);
+        document.getElementById('loader').classList.add('hidden');
     });
 
 
