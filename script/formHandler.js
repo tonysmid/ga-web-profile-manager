@@ -57,9 +57,8 @@ async function submitForm() {
     const imgName = formData.name.toLowerCase().replaceAll(' ', '-') + '.jpeg';
 
     const contactHtml = prepareContactHtml(formData, imgName);
-    document.getElementById('test').innerHTML = contactHtml;
-
-    console.log('submit it', {...formData, place, picData, imgName});
+    
+    console.log('submit it: ', {contactHtml, picData, imgName});
 }
 
 function imageCropUpload() {
@@ -152,7 +151,6 @@ async function loadProfiles() {
 function monitorPlace() {
     document.getElementById('fplace').addEventListener("input", function(event) {
         const fieldToSet = document.getElementById('fplaceinfo');
-        console.log(event);
         if(event.target.value === ""){
             fieldToSet.innerText = '-';
             return;
