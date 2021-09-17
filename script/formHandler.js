@@ -2,6 +2,8 @@
 let uploadCrop;
 let imageUploaded = false;
 let profiles;
+let GITHUB_REPO_BASE = 'https://api.github.com/repos/aldrinm/graphaware.github.io';
+let GITHUB_AUTH_TOKEN = '';
 
 function prepareContactHtml(formData, imgName) {
     return `<div className="contact">`
@@ -59,6 +61,8 @@ async function submitForm() {
     const contactHtml = prepareContactHtml(formData, imgName);
 
     console.log('submit it: ', {contactHtml, picData, imgName});
+
+    uploadToGithub(contactHtml);
 }
 
 function imageCropUpload() {
@@ -173,6 +177,60 @@ function init() {
     imageCropUpload();
     loadProfiles();
     monitorPlace();
+}
+
+function commitNewContent(newContent, sha) {
+    /* this didn't work 
+    let formData = new FormData();
+    formData.append('message', 'New person added');
+    formData.append('content', btoa(newContent));
+    formData.append('branch', 'master');
+    formData.append('sha', sha);
+    */
+
+
+    fetch(GITHUB_REPO_BASE + '/contents/company/index.html', {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'token ' + GITHUB_AUTH_TOKEN
+        },
+        body: '{"message":"New person added","content":"'+btoa(newContent)+'", "branch":"master", "sha":"'+sha+'"}'
+    }).then(function (response) {
+        console.log(response.json());
+    });      
+}
+
+        
+function uploadToGithub(contactHtml) {
+
+    fetch(GITHUB_REPO_BASE + '/contents/company/index.html', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'token ' + GITHUB_AUTH_TOKEN,
+            'Accept': 'application/vnd.github.v3+json'
+        }
+    }).then(function (response) {
+        //console.log('success!', response.json());
+        return response.json();
+    }).then(function (json) {
+        let sha = json.sha;
+
+        let decodedContents = atob(json.content);
+        //replace some strings
+        let anchorPoint = "<!-- End Contact Card -->";
+        let lastIndex = decodedContents.lastIndexOf(anchorPoint);
+
+        let newContent = decodedContents.substring(0, lastIndex) + anchorPoint + contactHtml + decodedContents.substring(lastIndex + anchorPoint.length);    
+
+        //now commit it on main
+        commitNewContent(newContent, sha);
+
+    }).catch(function (err) {
+        // There was an error
+        console.warn('Something went wrong.', err);
+    });
+
+
 }
 
 init();
