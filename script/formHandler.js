@@ -62,7 +62,7 @@ async function submitForm() {
 
     console.log('submit it: ', {contactHtml, picData, imgName});
 
-    uploadToGithub(contactHtml);
+    uploadToGithub(contactHtml, place);
 }
 
 function imageCropUpload() {
@@ -180,7 +180,7 @@ function init() {
 }
 
 function commitNewContent(newContent, sha) {
-    /* this didn't work 
+    /* this didn't work
     let formData = new FormData();
     formData.append('message', 'New person added');
     formData.append('content', btoa(newContent));
@@ -197,11 +197,18 @@ function commitNewContent(newContent, sha) {
         body: '{"message":"New person added","content":"'+btoa(newContent)+'", "branch":"master", "sha":"'+sha+'"}'
     }).then(function (response) {
         console.log(response.json());
-    });      
+    });
 }
 
-        
-function uploadToGithub(contactHtml) {
+function getAllIndexes(arr, val) {
+    var indexes = [], i = -1;
+    while ((i = arr.indexOf(val, i+1)) != -1){
+        indexes.push(i);
+    }
+    return indexes;
+}
+
+function uploadToGithub(contactHtml, place) {
 
     fetch(GITHUB_REPO_BASE + '/contents/company/index.html', {
         method: 'GET',
@@ -218,9 +225,10 @@ function uploadToGithub(contactHtml) {
         let decodedContents = atob(json.content);
         //replace some strings
         let anchorPoint = "<!-- End Contact Card -->";
-        let lastIndex = decodedContents.lastIndexOf(anchorPoint);
+        let allIndexes = getAllIndexes(decodedContents, anchorPoint);
+        const indexToUse = allIndexes[place - 1];
 
-        let newContent = decodedContents.substring(0, lastIndex) + anchorPoint + contactHtml + decodedContents.substring(lastIndex + anchorPoint.length);    
+        let newContent = decodedContents.substring(0, indexToUse) + anchorPoint + '\n\n<!-- Contact card -->\n\n' + contactHtml + '\n\n<!-- End Contact Card -->\n\n' + decodedContents.substring(indexToUse + anchorPoint.length);
 
         //now commit it on main
         commitNewContent(newContent, sha);
