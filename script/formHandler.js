@@ -63,7 +63,7 @@ async function submitForm() {
 
     console.log('submit it: ', {contactHtml, picData, imgName});
 
-    uploadToGithub(contactHtml, place);
+    uploadToGithub(contactHtml, place, picData, imgName);
 }
 
 function imageCropUpload() {
@@ -201,7 +201,7 @@ function getAllIndexes(arr, val) {
     return indexes;
 }
 
-function uploadToGithub(contactHtml, place) {
+function uploadToGithub(contactHtml, place, picData, imgName) {
 
     fetch(GITHUB_REPO_BASE + '/contents/company/index.html', {
         method: 'GET',
@@ -224,6 +224,7 @@ function uploadToGithub(contactHtml, place) {
         let newContent = decodedContents.substring(0, indexToUse) + anchorPoint + '\n\n<!-- Contact card -->\n\n' + contactHtml + '\n\n<!-- End Contact Card -->\n\n' + decodedContents.substring(indexToUse + anchorPoint.length);
 
         //now commit it on main
+        commitNewFile(picData, imgName);
         commitNewContent(newContent, sha);
 
     }).catch(function (err) {
@@ -231,6 +232,19 @@ function uploadToGithub(contactHtml, place) {
         console.warn('Something went wrong.', err);
     });
 
+
+}
+
+function commitNewFile(picData, imgName) {
+    fetch(GITHUB_REPO_BASE + '/contents/images/team/'+imgName, {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'token ' + GITHUB_AUTH_TOKEN
+        },
+        body: '{"message":"New image added","content":"'+ picData.substr(picData.indexOf(',') + 1) +'", "branch":"master"}'
+    }).then(function (response) {
+        console.log(response.json());
+    });
 
 }
 
