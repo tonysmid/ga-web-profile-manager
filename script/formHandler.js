@@ -2,8 +2,9 @@
 let uploadCrop;
 let imageUploaded = false;
 let profiles;
-let GITHUB_REPO_BASE = 'https://api.github.com/repos/aldrinm/graphaware.github.io';
-let GITHUB_AUTH_TOKEN = '';
+const GRAPHAWARE_WEBSITE_PROFILES = 'https://graphaware.com/company/';
+const GITHUB_REPO_BASE = 'https://api.github.com/repos/aldrinm/graphaware.github.io';
+const GITHUB_AUTH_TOKEN = '';
 
 function prepareContactHtml(formData, imgName) {
     return `<div className="contact">`
@@ -100,7 +101,6 @@ function imageCropUpload() {
     document.getElementById('upload').addEventListener('change', function () { readFile(this); });
 }
 
-
 function mountProfiles() {
 
     const ol = document.createElement('ol');
@@ -136,20 +136,13 @@ function processProfilesData(rawData) {
 }
 
 async function loadProfiles() {
-
-// Make a request for a user with a given ID
-    axios.get('https://graphaware.com/company/')
-        .then(function (response) {
-            // handle success
-            processProfilesData(response.data);
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        })
-        .then(function () {
-            // always executed
+    fetch(GRAPHAWARE_WEBSITE_PROFILES, {
+        method: 'GET',
+    }).then(response => {
+        response.text().then(text => {
+            processProfilesData(text);
         });
+    })
 }
 
 function monitorPlace() {
