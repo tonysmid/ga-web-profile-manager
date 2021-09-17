@@ -1,0 +1,35 @@
+
+.form-body {
+    width: 600px;
+    border-right: 1px solid #eeeeee;
+}
+
+.upload-wrap {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+}
+
+.croppie-container {
+    display: none;
+}
+
+.croppie-container.ready {
+    display: block !important;
+}
+
+.profile-pic {
+    width: 300px;
+    padding: 16px;
+}
+
+.profile-list {
+    width: 400px;
+    padding: 0 16px;
+}
+
+.issues {
+    font-size: small;
+    color: darkred;
+    margin-top: 1em;
+}

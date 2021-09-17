@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Manager</title>
+
+    <link rel="stylesheet" href="./style/croppie.css" />
+    <link rel="stylesheet" href="./style/style.css" />
+    <script src="./script/croppie.min.js"></script>
+    <script src="./script/axios.min.js"></script>
+
+</head>
+<body>
+
+
+
+
+<div style="display: flex">
+
+    <div class="form-body">
+        <h2>
+            Add person
+        </h2>
+
+            <label for="fname">Name:</label>
+            <input type="text" id="fname" name="fname"><br><br>
+            <label for="fposition">Position:</label>
+            <input type="text" id="fposition" name="fposition"><br><br>
+            <label for="femail">Email:</label>
+            <input type="text" id="femail" name="femail"><br><br>
+            <label for="ftwitter">Twitter:</label>
+            <input type="text" id="ftwitter" name="ftwitter"><br><br>
+            <label for="fbio">Bio:</label>
+            <textarea id="fbio" name="fbio" rows="4" cols="50"></textarea><br><br>
+            <label for="fplace">Place #:</label>
+            <input type="number" id="fplace" name="fplace">
+            <span id="fplaceinfo">
+                -
+            </span>
+            <br><br>
+            <a>
+                    <span>
+                        Upload profile photo
+                    </span>
+                <input type="file" id="upload" value="Choose a file" accept="image/*">
+            </a>
+            <div id="profilePic" class="profile-pic">
+                <div class="upload-wrap">
+                    <div id="upload-demo"></div>
+                </div>
+            </div>
+
+            </br> </br>
+            <button type="button" onclick="submitForm()">Add Profile</button>
+            <div id="issues" class="issues"></div>
+
+        <div id="test">
+
+        </div>
+
+        <script src="./script/formHandler.js" ></script>
+    </div>
+    <div class="profile-list">
+        <h3>
+            Already existing profiles
+        </h3>
+        <div id="profile-list">
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
