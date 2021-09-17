@@ -224,7 +224,7 @@ function uploadToGithub(contactHtml, place, picData, imgName) {
         let newContent = decodedContents.substring(0, indexToUse) + anchorPoint + '\n\n<!-- Contact card -->\n\n' + contactHtml + '\n\n<!-- End Contact Card -->\n\n' + decodedContents.substring(indexToUse + anchorPoint.length);
 
         //now commit it on main
-        commitNewFile(picData, imgName);
+        //commitNewFile(picData, imgName);
         commitNewContent(newContent, sha);
 
     }).catch(function (err) {
