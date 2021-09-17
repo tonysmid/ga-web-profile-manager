@@ -33,3 +33,33 @@
     color: darkred;
     margin-top: 1em;
 }
+
+.card {
+    display: table;
+    margin: 16px auto;
+    border: 1px solid #ececec;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px #e6e6e6;
+    padding: 12px 28px;
+    background: white;
+}
+
+.body-wrap {
+    width: 100%;
+ }
+
+body {
+    background: #fbfbfb;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+label {
+    width: 60px;
+    display: inline-block;
+    font-size: smaller;
+    font-weight: bold;
+}
+
+li {
+    height: 1.5em;
+}

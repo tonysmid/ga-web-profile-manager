@@ -57,7 +57,7 @@ async function submitForm() {
     const imgName = formData.name.toLowerCase().replaceAll(' ', '-') + '.jpeg';
 
     const contactHtml = prepareContactHtml(formData, imgName);
-    
+
     console.log('submit it: ', {contactHtml, picData, imgName});
 }
 
